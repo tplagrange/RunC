@@ -1,0 +1,67 @@
+#!/bin/bash
+###############################################################################
+#
+#   Run C
+#   Author: Thomas Lagrange
+#   Version: 1.0
+#   Description: Utility to compile and run C code with a temporary executable.
+#   
+#  Permission is hereby granted, free of charge, to any person obtaining a 
+#  copy of this software and associated documentation files (the "Software"), 
+#  to deal in the Software without restriction, including without limitation 
+#  the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+#  and/or sell copies of the Software, and to permit persons to whom the 
+#  Software is furnished to do so, subject to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in 
+#  all copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+#  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+#  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+#  DEALINGS IN THE SOFTWARE.
+
+
+# Variabes
+name=""
+source=""
+gccPath=""
+executable=$(hexdump -n 16 -v -e '/1 "%02X"' -e '/16 "\n"' /dev/urandom)
+
+# Usage statement
+function usage() {
+    echo "Usage: ${name} <C File>\n"
+}
+
+# Check that the GNU Compiler Collection is installed
+gccPath=$(which gcc)
+if [[ $gccPath == "" ]]; then
+    echo "Please install gcc to continue...\n"
+    exit 0
+fi
+
+# Store executable name
+name=${0}
+
+# Print usage if wrong number of arguments
+if [[ $# != 1 ]]; then
+    usage
+    exit 0
+else
+    # Set the C code source file to the argument
+    source=$1
+fi
+
+# Run the compiler and store the executable
+"${gccPath}" $1 -o "${executable}"
+
+# Run the executable
+$PWD"/${executable}"
+
+# Remove the executable
+rm -rf "${executable}"
+
+exit 0
