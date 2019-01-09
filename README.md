@@ -1,7 +1,10 @@
 # Run C
 
-Sometimes you do not want to use an IDE but you want to work on some C code, for example: when working over ssh.
-This bash utility will allow you to run code as such:
+When testing C code on a shell I often find myself repeating the steps of re-compiling and re-running an executable as I debug a program. The process can be tedious when repeated dozens of times in a row. 
+
+This utility allows you to compile and run you C code in one line. Additionally, no executable will be left behind so there's no need to worry about file clutter.
+
+The utility is invoked as such:
 
 ```
 runc someFile.c
