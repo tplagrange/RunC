@@ -24,7 +24,6 @@
 #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 #  DEALINGS IN THE SOFTWARE.
 
-
 # Variabes
 name=""
 source=""
@@ -62,7 +61,7 @@ if [[ $# == 2 ]]; then
     fi
 elif [[ $# == 1 ]]; then
     # Set the C code source file to the argument
-    source=$1
+    source=${1}
 else
     usage
     exit 0
