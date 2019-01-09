@@ -76,13 +76,13 @@ fi
 # Run the compiler
 if [[ $timeFlag == 1 ]]; then
     # Print compile time
-    time "${gccPath}" $1 -o "${executable}"
+    time "${gccPath}" "${source}" -o "${executable}"
 else
-    "${gccPath}" $1 -o "${executable}"
+    "${gccPath}" "${source}" -o "${executable}"
 fi
 
 # Check if the compiler created a binary
-if [[ ! -f $PWD"/$executable" ]]; then
+if [[ ! -f $PWD"/${executable}" ]]; then
     echo "Error compiling code"
     exit 0
 fi
