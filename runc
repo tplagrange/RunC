@@ -3,7 +3,7 @@
 #
 #   Run C
 #   Author: Thomas Lagrange
-#   Version: 1.0
+#   Version: 1.1
 #   Description: Utility to compile and run C code with a temporary executable.
 #   
 #  Permission is hereby granted, free of charge, to any person obtaining a 
@@ -30,10 +30,14 @@ name=""
 source=""
 gccPath=""
 executable=$(hexdump -n 16 -v -e '/1 "%02X"' -e '/16 "\n"' /dev/urandom)
+timeFlag=0
 
 # Usage statement
 function usage() {
-    echo "Usage: ${name} <C File>\n"
+    echo ""
+    echo "Usage: ${name} fileName [-t]"
+    echo "    -t: Will output the compile and exuection time of the program"
+    echo ""
 }
 
 # Check that the GNU Compiler Collection is installed
@@ -47,19 +51,50 @@ fi
 name=${0}
 
 # Print usage if wrong number of arguments
-if [[ $# != 1 ]]; then
-    usage
-    exit 0
-else
+if [[ $# == 2 ]]; then
+    if [[ $2 == "-t" ]]; then
+        # Set the C code source file to the argument
+        source=$1
+        timeFlag=1
+    else
+        usage
+        exit 0
+    fi
+elif [[ $# == 1 ]]; then
     # Set the C code source file to the argument
     source=$1
+else
+    usage
+    exit 0
 fi
 
-# Run the compiler and store the executable
-"${gccPath}" $1 -o "${executable}"
+# Check the source exists
+if [[ ! -f $source ]]; then
+    echo "File ${source} does not exist"
+    exit 0
+fi
+
+# Run the compiler
+if [[ $timeFlag == 1 ]]; then
+    # Print compile time
+    time "${gccPath}" $1 -o "${executable}"
+else
+    "${gccPath}" $1 -o "${executable}"
+fi
+
+# Check if the compiler created a binary
+if [[ ! -f $PWD"/$executable" ]]; then
+    echo "Error compiling code"
+    exit 0
+fi
 
 # Run the executable
-$PWD"/${executable}"
+if [[ $timeFlag == 1 ]]; then
+    # Print execution time
+    time $PWD"/${executable}"
+else 
+    $PWD"/${executable}"    
+fi
 
 # Remove the executable
 rm -rf "${executable}"
