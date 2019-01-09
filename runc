@@ -1,10 +1,18 @@
 #!/bin/bash
 ###############################################################################
 #
-#   Run C
-#   Author: Thomas Lagrange
-#   Version: 1.1
-#   Description: Utility to compile and run C code with a temporary executable.
+#  Run C
+#  Author: Thomas Lagrange
+#  Version: 1.2
+#  Description: Utility to compile and run C code with a temporary executable.
+#   
+#  1.0:
+#    - macOS and LXLE support for simple directories
+#  1.1:
+#    - Rudimentary time measurement for compile and execution time
+#    - Randomized temporary filename for binary
+#  1.2: 
+#    - Support for special characters in directories 
 #   
 #  Permission is hereby granted, free of charge, to any person obtaining a 
 #  copy of this software and associated documentation files (the "Software"), 
@@ -33,16 +41,14 @@ timeFlag=0
 
 # Usage statement
 function usage() {
-    echo ""
     echo "Usage: ${name} fileName [-t]"
     echo "    -t: Will output the compile and exuection time of the program"
-    echo ""
 }
 
 # Check that the GNU Compiler Collection is installed
 gccPath=$(which gcc)
 if [[ $gccPath == "" ]]; then
-    echo "Please install gcc to continue...\n"
+    echo "Please install gcc to continue..."
     exit 0
 fi
 
@@ -90,9 +96,9 @@ fi
 # Run the executable
 if [[ $timeFlag == 1 ]]; then
     # Print execution time
-    time $PWD"/${executable}"
+    time "${PWD}/${executable}"
 else 
-    $PWD"/${executable}"    
+    "${PWD}/${executable}"    
 fi
 
 # Remove the executable
