@@ -53,7 +53,7 @@ name=${0}
 if [[ $# == 2 ]]; then
     if [[ $2 == "-t" ]]; then
         # Set the C code source file to the argument
-        source=$1
+        source="${1}"
         timeFlag=1
     else
         usage
@@ -61,7 +61,7 @@ if [[ $# == 2 ]]; then
     fi
 elif [[ $# == 1 ]]; then
     # Set the C code source file to the argument
-    source=${1}
+    source="${1}"
 else
     usage
     exit 0
